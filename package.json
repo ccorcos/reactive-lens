@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "parcel index.html",
-		"build": "rm -rf dist && parcel build index.html --public-url '.'",
-		"deploy": "git add -f dist && git commit -m 'Temporary commit' && git subtree push --prefix dist origin gh-pages && git reset HEAD~",
-		"release": "npm run build && npm run deploy"
+    "build": "rm -rf dist && parcel build index.html --public-url '.'",
+    "deploy": "git add -f dist && git commit -m 'Temporary commit' && git subtree push --prefix dist origin gh-pages && git reset HEAD~",
+    "release": "npm run build && npm run deploy"
   },
   "keywords": [],
   "author": "Chet Corcos <ccorcos@gmail.com> (http://www.chetcorcos.com/)",
@@ -24,7 +24,6 @@
     "@types/react": "^16.0.25",
     "@types/react-dom": "^16.0.3",
     "parcel-bundler": "^1.2.0",
-    "parcel-plugin-typescript": "^0.2.0-astmap.0",
     "typescript": "^2.6.2",
     "ts-node": "^3.3.0"
   }
