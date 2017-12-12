@@ -1,14 +1,51 @@
 import * as React from "react"
 import * as _ from "lodash"
+import * as glamor from "glamor"
 import Component from "reactive-magic/component"
 import { Value } from "reactive-magic"
 import Catmullrom from "./Catmullrom"
 
 type Point = { x: number; y: number }
 
+const offset = glamor.keyframes("offset", {
+	to: {
+		strokeDashoffset: 0,
+	},
+})
+
 export default class Draw extends Component<{}> {
 	private dragging = new Value(false)
+	private animate = new Value(false)
 	private paths = new Value<Array<Array<Point>>>([])
+	private pathRefs: { [key: number]: SVGPathElement } = {}
+
+	private handlePathRef = (index: number) => (path: SVGPathElement | null) => {
+		if (path) {
+			this.pathRefs[index] = path
+		}
+	}
+
+	didUpdate() {
+		const paths = this.paths.get()
+		const pathRefs = this.pathRefs
+		for (let i = 0; i < paths.length; i++) {
+			const element = pathRefs[i]
+			if (element) {
+				if (this.animate.get()) {
+					const length = element.getTotalLength()
+					element.style.strokeDasharray = length + "px"
+					element.style.strokeDashoffset = length + "px"
+					element.style.animation = offset + " 0.45s linear forwards"
+					element.style.animationDelay = "0s"
+				} else {
+					element.style.strokeDasharray = null
+					element.style.strokeDashoffset = null
+					element.style.animation = null
+					element.style.animationDelay = null
+				}
+			}
+		}
+	}
 
 	view() {
 		const paths = this.paths.get()
@@ -35,6 +72,7 @@ export default class Draw extends Component<{}> {
 						{paths.map((path, index) => {
 							return (
 								<path
+									ref={this.handlePathRef(index)}
 									key={index}
 									stroke="#BADA55"
 									strokeWidth="2"
@@ -84,5 +122,8 @@ export default class Draw extends Component<{}> {
 		this.paths.update(paths => paths.slice(0, paths.length - 1))
 	}
 
-	private handleAnimate = () => {}
+	private handleAnimate = () => {
+		this.animate.update(value => !value)
+		this.forceUpdate()
+	}
 }
