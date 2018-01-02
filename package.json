@@ -17,7 +17,7 @@
     "lodash": "^4.17.4",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
-    "reactive-magic": "^2.1.1"
+    "reactive-magic": "^2.1.5"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.85",

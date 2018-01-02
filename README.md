@@ -1,16 +1,11 @@
-# Draw SVG
+# Parcel Boilerplate
 
-## To Do
+This is a minimal boilerplate application for building web applications.
 
-- parcel-boilerplate
-- generic animate component
-- paste external svg
-- draw and export svg
-- splines
-	- catmullrom npm package?
-	- https://www.npmjs.com/package/@turf/bezier-spline
-	- https://www.npmjs.com/package/splines
-	- https://www.npmjs.com/package/cat-rom-spline
-	- https://www.npmjs.com/package/b-spline
-	- https://www.npmjs.com/package/cubic-spline
-	- http://schepers.cc/getting-to-the-point
+## Features
+
+- React
+- Reactive Magic
+- Parcel
+- Typescript
+- Glamor
