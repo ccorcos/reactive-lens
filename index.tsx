@@ -1,6 +1,7 @@
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import { css } from "glamor"
+import App from "./App"
 
 css.global("html, body", {
 	margin: 0,
@@ -21,4 +22,4 @@ css.global("body", {
 })
 
 const root = document.getElementById("root")
-ReactDOM.render(<Draw />, root)
+ReactDOM.render(<App />, root)

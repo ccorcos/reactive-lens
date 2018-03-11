@@ -14,18 +14,18 @@
   "license": "ISC",
   "dependencies": {
     "glamor": "^2.20.40",
-    "lodash": "^4.17.4",
-    "react": "^16.1.1",
-    "react-dom": "^16.1.1",
+    "lodash": "^4.17.5",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "reactive-magic": "^2.1.5"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.85",
-    "@types/react": "^16.0.25",
+    "@types/lodash": "^4.14.104",
+    "@types/react": "^16.0.40",
     "@types/react-dom": "^16.0.3",
-    "parcel-bundler": "^1.2.0",
-    "parcel-plugin-typescript": "^0.2.0-next.fix-hang",
-    "ts-node": "^3.3.0",
-    "typescript": "^2.6.2"
+    "parcel-bundler": "^1.6.2",
+    "parcel-plugin-typescript": "^0.7.0",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.7.2"
   }
 }
