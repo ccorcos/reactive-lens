@@ -1,6 +1,8 @@
 import * as React from "react"
 import * as _ from "lodash"
 
+// A dependency is just an Event Emitter. Add a listener to listen
+// for updates and call emit to trigger and update.
 class Dependency {
 	private listeners: Set<() => void> = new Set()
 	public add(listener: () => void) {
@@ -9,10 +11,11 @@ class Dependency {
 	public remove(listener: () => void) {
 		this.listeners.delete(listener)
 	}
-	// Emit an event and prevent circular dependencies.
+	// Prevent circular dependencies from crashing.
 	private emitting = false
 	public emit = () => {
 		if (this.emitting) {
+			console.warn("Circular dependency detected.")
 			return
 		}
 		this.emitting = true
@@ -21,10 +24,18 @@ class Dependency {
 	}
 }
 
+// This global allows you to track the dependencies of a function.
 const contexts: Array<Set<Dependency>> = []
 
+// A Lens is just a setter and a getter on some value.
+interface LensParent<State> {
+	get(): State
+	set(newState: State): void
+}
+
+// This is a Lens with that uses the global context for reactive bindings.
 class Lens<State> {
-	constructor(private parent: { get(): State; set(newState: State): void }) {}
+	constructor(private parent: LensParent<State>) {}
 	private dependency = new Dependency()
 	get(): State {
 		const context = contexts[0]
@@ -35,6 +46,11 @@ class Lens<State> {
 		this.dependency.emit()
 		this.parent.set(newState)
 	}
+	// Create a new lens based on a property of the parent lens.
+	// TODO: Rather than caching, a cleaner approach might be to register
+	// the path to this lens with the parent lens which can index the paths
+	// and compute the update. That way we have global understanding of all
+	// the dependencies.
 	private cache = new Map<number | string, Lens<any>>()
 	prop(key: keyof State) {
 		const cached = this.cache.get(key)
@@ -65,6 +81,7 @@ class Lens<State> {
 	}
 }
 
+// A decorator that makes a React component reactive.
 function Reactive<T extends { new (...args: any[]): React.Component }>(
 	constructor: T
 ) {
@@ -105,6 +122,7 @@ function Reactive<T extends { new (...args: any[]): React.Component }>(
 	}
 }
 
+// A reactive counter.
 interface CounterProps {
 	label: string
 	count: Lens<number>
@@ -122,7 +140,6 @@ class Counter extends React.Component<CounterProps> {
 	}
 
 	render() {
-		console.log("Counter", this.props)
 		return (
 			<div>
 				<span>{this.props.label}</span>
@@ -134,6 +151,7 @@ class Counter extends React.Component<CounterProps> {
 	}
 }
 
+// Top-level app state.
 interface AppState {
 	count: number
 	delta: number
@@ -145,10 +163,11 @@ const appState = new Lens<AppState>({
 	set: newState => (_appState = newState),
 })
 
+// The app consists of two counters. The delta counter controls the amount by
+// which the counter goes up and down.
 @Reactive
 class App extends React.Component {
 	render() {
-		console.log("App")
 		return (
 			<div>
 				<Counter
